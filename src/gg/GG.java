@@ -3,7 +3,7 @@ import java.util.*;
 
 public class GG {
     
-    // Stat Order PokeName, PokeType, level, bHp, bAtk, bSp_Atk, bDef, bSp_def, bSpd
+    // Pokemon Stat Order PokeName, PokeType, level, bHp, bAtk, bSp_Atk, bDef, bSp_def, bSpd
     
     // STARTER POKEMONS
     static Pokemon Bulbasaur = new Pokemon("Bulbasaur", "Grass", 5, 45, 49, 65, 49, 65, 45);
@@ -16,14 +16,13 @@ public class GG {
     
     //--------------------------------------------
     
-    // MOVES
-    //--------------------------------------------
     
-    // Stat Order MoveName, MoveCategory, MoveType, power, accuracy, pp
+    // Move Stat Order ( MoveName, MoveCategory, MoveType, power, accuracy, pp )
     static Move Tackle = new Move("Tackle", "Physical", "Normal", 40, 100, 35);
     static Move Scratch = new Move("Scratch", "Physical", "Normal", 40, 100, 35);
     static Move VineWhip = new Move("Vine Whip", "Physical", "Grass", 45, 100, 25);
     
+   
     //--------------------------------------------
     static Scanner sc = new Scanner (System.in);
     
@@ -35,6 +34,7 @@ public class GG {
     static int pokeChoice;
     static Pokemon playerPokemon;
     static Pokemon rivalPokemon;
+    static Pokemon wildPokemon;
     
     // Input Validation
     static int getIntInput(){
@@ -54,12 +54,37 @@ public class GG {
         }   
     }
   }
-    // MAIN 
-    public static void main(String[] args) {
+    
+    // Empty Name Input Validation
+    static String getValidName() {
+    while (true) {
+        String input = sc.nextLine().trim();
         
-        MainMenu();
-        System.out.println("Thank you");
+        if (input.isEmpty()) {
+            System.out.println("-------------------------------------------------------");
+            System.out.println("You can't possibly be nameless!");
+            System.out.print("Please enter a valid name: ");
+        } else {
+            return input;
+        }
     }
+}
+    
+    // GBA Style
+    static void gbaPrint(String text) {
+    for (int i = 0; i < text.length(); i++) {
+        System.out.print(text.charAt(i));
+        try {
+            
+            Thread.sleep(30); 
+        } 
+        
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    sc.nextLine(); 
+}
     
     // MAIN MENU
     static void MainMenu() {
@@ -86,20 +111,22 @@ public class GG {
     // MAIN STORY
     static void mainStory(){
         
-        System.out.println("???: Hi, I'm Professor Delamaine");
-        System.out.println("Delamaine: What is your name?");
+        gbaPrint("Press ENTER to continue the dialogue.");
+        gbaPrint("???: Hi, I'm Professor Delamaine");
+        gbaPrint("Delamaine: What is your name?");
         System.out.print("Enter your Name: ");
-        mcName = sc.nextLine();
-        System.out.println("It's nice to meet you " + mcName);
-        System.out.println("Delamaine: Let's not beat around the bush " + mcName + ", you may now finally own your first pokemon");
-        System.out.println("Delamaine: Choose your pokemon");
+        mcName = getValidName();
+        gbaPrint("It's nice to meet you " + mcName);
+        
+        gbaPrint("Delamaine: Let's not beat around the bush " + mcName + ", you may now finally own your first pokemon");
+        gbaPrint("Delamaine: Choose your pokemon");
         
         pokeChoice();
         RenamePokemon();
         
-        System.out.println("Delamaine: Oh! Here comes your cousin");
-        System.out.println("Cousin???: My name's Dwight, although this is the first time we've met I'm actually your cousin!");
-        System.out.println("Delamaine: Dwight, you can now also choose your first pokemon!");
+        gbaPrint("Delamaine: Oh! Here comes your cousin");
+        gbaPrint("Cousin???: My name's Dwight, although this is the first time we've met I'm actually your cousin!");
+        gbaPrint("Delamaine: Dwight, you can now also choose your first pokemon!");
         
         // YOUR RIVAL AUTOMATICALLY CHOOSES A POKEMON THAT COUNTERS YOUR POKEMON
         switch(pokeChoice){
@@ -107,14 +134,14 @@ public class GG {
                         rivalPokemon = Squirtle;
                          break;
             case 2: System.out.println("Dwight chose " + Bulbasaur.PokeName + "!");
-                         playerPokemon = Bulbasaur;
+                         rivalPokemon = Bulbasaur;
                          break;
             case 3: System.out.println("Dwight chose " + Charmander.PokeName + "!");
-                         playerPokemon = Charmander;
+                         rivalPokemon = Charmander;
                          break;
         }
         
-        System.out.println("Delamaine: my son, Dwight seems like he wants to battle");
+        System.out.println("Delamaine: my son seems like he wants to battle");
         battle();
     }
     
@@ -194,7 +221,7 @@ public class GG {
                     battleChoice = getIntInput();
                     
                     switch (battleChoice){
-                        case 1: //fight();
+                        case 1: fight();
                                     break;
                         case 2: //SwitchPokemon();
                                     break;
@@ -208,7 +235,50 @@ public class GG {
                 }
             }
             
+            static void initializeMoves() {
+                
+                // Bulbasaur
+                Bulbasaur.moves[0] = Tackle;
+                Bulbasaur.moves[1] = VineWhip;
+                
+                // Charmander
+                Charmander.moves[0] = Scratch;
+                
+                // Squirtle
+                Squirtle.moves[0] = Tackle;            
+            }
+            
     static void battle(Pokemon player, Pokemon rival) {
+        
         System.out.println("Battle: " + player.PokeName + " vs " + rival.PokeName);    
+        
+        while(playerPokemon.hp == 0 || rivalPokemon.hp == 0) {
+            battle();
+        }
       }
+    
+    static void fight() {
+    System.out.println("Choose a move:");
+    
+    for (int i = 0; i < playerPokemon.moves.length; i++) {
+        if (playerPokemon.moves[i] != null) {
+            System.out.println((i + 1) + ". " + playerPokemon.moves[i].MoveName);
+        }
     }
+    
+    System.out.print("> ");
+    int moveChoice = getIntInput();
+
+    Move selectedMove = playerPokemon.moves[moveChoice - 1];
+
+    System.out.println(playerPokemon.PokeName + " used " + selectedMove.MoveName + "!");
+   }
+    
+        // MAIN 
+    public static void main(String[] args) {
+        
+        initializeMoves();
+        MainMenu();
+        System.out.println("Thank you");
+    }
+      }

@@ -15,8 +15,8 @@ class Pokemon {
         this.PokeType = PokeType;
         this.level = level;
         
-        //STAT FORMULA PART LOL ;)
-        this.maxHp = ((bHP * 2 * level)/ 100) + 5;
+        // STAT FORMULA PART LOL ;)
+        this.maxHp = ((bHP * 2 * level)/ 100) + level + 10;
         this.hp = maxHp;
         this.atk = ((bAtk * 2 * level)/ 100)+ 5;
         this.spAtk = ((bSp_Atk * 2 * level)/ 100)+ 5;
