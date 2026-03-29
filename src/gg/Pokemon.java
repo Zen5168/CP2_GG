@@ -1,28 +1,30 @@
 package gg;
-import java.util.*;
 
-class Pokemon {
-    String PokeName;
-    String PokeType;
-    int level;
-    int maxHp, hp, atk, spAtk, def, spDef,  speed;
-    Move [] moves = new Move[4];
-    int moveCount = 0;
-    // ArrayList<Move> moves = new ArrayList<>();
-    
-    public Pokemon(String PokeName, String PokeType, int level, int bHP, int bAtk, int bSp_Atk, int bDef, int bSp_def, int bSpd){
-        this.PokeName = PokeName;
-        this.PokeType = PokeType;
+public class Pokemon {
+  
+    protected String pokeName; 
+    protected String type;
+    protected int hp, maxHp, atk, def, spAtk, spDef, speed, level;
+    protected Move[] moves = new Move[4];
+
+    public Pokemon(String name, String type, int level, int hp, int atk, int spAtk, int def, int spDef, int speed) {
+        this.pokeName = name;
+        this.type = type;
         this.level = level;
-        
-        // STAT FORMULA PART LOL ;)
-        this.maxHp = ((bHP * 2 * level)/ 100) + level + 10;
-        this.hp = maxHp;
-        this.atk = ((bAtk * 2 * level)/ 100)+ 5;
-        this.spAtk = ((bSp_Atk * 2 * level)/ 100)+ 5;
-        this.def = ((bDef * 2 * level)/ 100)+ 5;
-        this.spDef = ((bSp_def * 2 * level)/ 100)+ 5;
-        this.speed = ((bSpd * 2 * level)/ 100)+ 5;
-        
+        this.hp = hp;
+        this.maxHp = hp;
+        this.atk = atk;
+        this.spAtk = spAtk;
+        this.def = def;
+        this.spDef = spDef;
+        this.speed = speed;
+    }
+
+    public void takeDamage(int damage) {
+        this.hp = Math.max(0, this.hp - damage);
+    }
+
+    public boolean isFainted() {
+        return hp <= 0;
     }
 }
